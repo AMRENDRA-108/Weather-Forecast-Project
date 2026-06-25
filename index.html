@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>WeatherSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-default">
+
+  <div id="particles" class="particles" aria-hidden="true"></div>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon"><i class="fas fa-cloud-bolt"></i></div>
+        <span class="brand-name">WeatherSphere</span>
+      </div>
+      <div class="header-clock">
+        <div id="clockTime" class="clock-time">--:--:--</div>
+        <div id="clockDate" class="clock-date">Loading…</div>
+      </div>
+    </header>
+
+    <!-- SEARCH -->
+    <section class="search-section" aria-label="Search weather">
+      <div class="search-bar">
+        <i class="fas fa-magnifying-glass search-ico"></i>
+        <input id="cityInput" type="text" placeholder="Search city or place…"
+          autocomplete="off" aria-label="City search" />
+        <button id="micBtn" class="mic-btn" aria-label="Voice search" title="Search by voice">
+          <i class="fas fa-microphone" id="micIco"></i>
+        </button>
+      </div>
+      <button id="searchBtn" class="btn-search">
+        <i class="fas fa-search"></i> Search
+      </button>
+      <button id="geoBtn" class="btn-geo" aria-label="Use current location">
+        <i class="fas fa-location-crosshairs"></i> My Location
+      </button>
+      <div id="listeningTag" class="listening-tag" aria-live="polite" hidden>
+        <span class="blink-dot"></span> Listening…
+      </div>
+    </section>
+
+    <!-- MESSAGES -->
+    <div id="msgBox" class="msg-box" role="alert" aria-live="assertive" hidden></div>
+
+    <!-- LOADER -->
+    <div id="loader" class="loader" aria-label="Loading weather" hidden>
+      <div class="spin-ring"></div>
+      <p>Fetching weather data…</p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <main id="dashboard" class="dashboard" aria-label="Weather information" hidden>
+
+      <!-- Hero Card -->
+      <div class="card hero-card">
+        <div class="hero-left">
+          <p class="city-label">
+            <i class="fas fa-location-dot"></i>
+            <span id="cityName">—</span>
+            <span id="countryBadge" class="country-badge">—</span>
+          </p>
+          <div class="big-temp" id="bigTemp">—°</div>
+          <p class="weather-desc" id="weatherDesc">—</p>
+          <p class="feels-like" id="feelsLike">Feels like —</p>
+          <div class="temp-range">
+            <span><i class="fa-solid fa-arrow-up hi"></i><span id="tempHi">—</span></span>
+            <span><i class="fa-solid fa-arrow-down lo"></i><span id="tempLo">—</span></span>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div id="weatherEmoji" class="weather-emoji" aria-hidden="true">🌤️</div>
+        </div>
+      </div>
+
+      <!-- Voice Assistant Row -->
+      <div class="voice-row card">
+        <div class="voice-info">
+          <i class="fas fa-universal-access fa-lg"></i>
+          <span>Voice Assistant for Accessibility</span>
+        </div>
+        <div class="voice-btns">
+          <button id="speakBtn" class="btn-speak" aria-label="Read weather aloud">
+            <i class="fas fa-volume-high"></i>
+            <span id="speakLabel">Read Weather Aloud</span>
+          </button>
+          <button id="stopBtn" class="btn-stop" aria-label="Stop speaking" hidden>
+            <i class="fas fa-stop"></i> Stop
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card"><i class="fas fa-droplet"></i><div><div class="sv" id="humidity">—</div><div class="sl">Humidity</div></div></div>
+        <div class="stat-card"><i class="fas fa-wind"></i><div><div class="sv" id="windSpeed">—</div><div class="sl">Wind Speed</div></div></div>
+        <div class="stat-card"><i class="fas fa-eye"></i><div><div class="sv" id="visibility">—</div><div class="sl">Visibility</div></div></div>
+        <div class="stat-card"><i class="fas fa-gauge-high"></i><div><div class="sv" id="pressure">—</div><div class="sl">Pressure</div></div></div>
+        <div class="stat-card"><i class="fas fa-cloud"></i><div><div class="sv" id="cloudCover">—</div><div class="sl">Cloud Cover</div></div></div>
+        <div class="stat-card"><i class="fas fa-temperature-half"></i><div><div class="sv" id="dewPoint">—</div><div class="sl">Dew Point</div></div></div>
+      </div>
+
+      <!-- AQI CARD -->
+      <div class="card aqi-card">
+        <h3 class="card-heading"><i class="fas fa-lungs"></i> Air Quality Index</h3>
+        <div class="aqi-container">
+          <div class="aqi-main">
+            <div class="aqi-score-box">
+              <div class="aqi-value" id="aqiValue">—</div>
+              <div class="aqi-label-badge" id="aqiBadge">
+                <span id="aqiLabel">—</span>
+              </div>
+            </div>
+            <p class="aqi-desc" id="aqiDesc">—</p>
+          </div>
+
+          <div class="aqi-scale-section">
+            <div class="aqi-bar-container">
+              <div class="aqi-scale-bar">
+                <div class="aqi-pointer" id="aqiPointer"></div>
+              </div>
+              <div class="aqi-scale-labels">
+                <span class="scale-label">Good</span>
+                <span class="scale-label">Moderate</span>
+                <span class="scale-label">Unhealthy</span>
+                <span class="scale-label">V.Unhealthy</span>
+                <span class="scale-label">Hazardous</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="aqi-pollutants-section">
+            <h4 class="pollutants-title">Key Pollutants</h4>
+            <div class="aqi-pollutants" id="aqiPollutants"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5-DAY FORECAST CARD -->
+      <div class="card forecast-card">
+        <h3 class="card-heading"><i class="fas fa-calendar-days"></i> 5-Day Forecast</h3>
+        <div class="forecast-wrapper">
+          <div class="forecast-grid" id="forecastGrid"></div>
+        </div>
+      </div>
+
+      <!-- Sun Journey Card -->
+      <div class="card sun-card">
+        <h3 class="card-heading"><i class="fas fa-sun"></i> Sun Journey</h3>
+        <div class="sun-track">
+          <div class="sun-end">
+            <div class="sun-orb rise"><i class="fas fa-sun"></i></div>
+            <div class="stime" id="sunriseTime">—</div>
+            <div class="slbl">Sunrise</div>
+          </div>
+          <div class="arc-wrap">
+            <svg viewBox="0 0 220 110" class="arc-svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="arcG" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ffd166"/>
+                  <stop offset="100%" stop-color="#ef476f"/>
+                </linearGradient>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <path d="M 15 100 A 95 95 0 0 1 205 100" fill="none"
+                stroke="rgba(255,255,255,0.15)" stroke-width="3" stroke-linecap="round"/>
+              <path id="arcFill" d="M 15 100 A 95 95 0 0 1 205 100" fill="none"
+                stroke="url(#arcG)" stroke-width="3" stroke-linecap="round"
+                stroke-dasharray="299" stroke-dashoffset="299"/>
+              <circle id="sunBall" cx="15" cy="100" r="9" fill="#ffd166" filter="url(#glow)"/>
+            </svg>
+            <div class="day-dur" id="dayDur">Day: — h — m</div>
+          </div>
+          <div class="sun-end">
+            <div class="sun-orb set"><i class="fas fa-sun"></i></div>
+            <div class="stime" id="sunsetTime">—</div>
+            <div class="slbl">Sunset</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Local Time Card -->
+      <div class="card local-card">
+        <i class="fas fa-clock fa-2x" aria-hidden="true"></i>
+        <div>
+          <div class="lt-label">Local time in <strong id="ltCity">—</strong></div>
+          <div class="lt-time" id="ltTime">--:--:--</div>
+          <div class="lt-date" id="ltDate">—</div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="footer">
+      Powered by <a href="https://openweathermap.org" target="_blank" rel="noopener">OpenWeatherMap</a>
+      &nbsp;·&nbsp; WeatherSphere
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
