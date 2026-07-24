@@ -1,6 +1,16 @@
 # Weather-Forecast-Project
 Weather Forecast Web Application built using HTML, CSS, JavaScript, and OpenWeatherMap API. Users can search any city and get real-time weather information including temperature, humidity,aqi,wind speed, and weather conditions.
 
+# 🌐 Live Demo
+
+Add your deployed URL here
+
+```
+file:///c%3A/Users/Amrendra/OneDrive/Desktop/Project/Weather%20forecast/index.html
+```
+
+---
+
 # 🌦️ Weather Forecast Application
 
 A simple and responsive Weather Forecast Web Application built using HTML, CSS, JavaScript, and OpenWeatherMap API.
